@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === C1PHER Hacker Title === */
+.c1pher-title {
+  font-family: 'Courier New', monospace;
+  font-size: 4rem;
+  letter-spacing: 0.4em;
+  color: #39ff14; /* neon green */
+
+  /* glow effect */
+  text-shadow:
+    0 0 5px #39ff14,
+    0 0 10px #39ff14,
+    0 0 20px #39ff14;
+
+  /* animations */
+  animation: glitch 0.15s infinite alternate,
+             flicker 3s infinite;
+
+  position: relative;
+}
+
+/* glitch movement */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-2px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}
+
+/* flicker effect */
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+  }
+}
+
+
+/*  HackerTile Starts Here */
+.hacker-title {
+  font-family: 'Courier New', monospace;
+  font-size: 4rem;
+  letter-spacing: 0.4em;
+  color: #39ff14;
+  text-shadow:
+    0 0 5px #39ff14,
+    0 0 10px #39ff14,
+    0 0 20px #39ff14;
+  position: relative;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 0.1em;
+  animation: blink 0.7s infinite;
+  color: #39ff14;
+}
+
+/* blink cursor */
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+/* glitch/shaking effect */
+.glitch {
+  animation: glitch 0.15s infinite alternate;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, -2px); }
+  60% { transform: translate(-2px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0); }
+}

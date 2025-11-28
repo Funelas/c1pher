@@ -2,51 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === C1PHER Hacker Title === */
-.c1pher-title {
-  font-family: 'Courier New', monospace;
-  font-size: 4rem;
-  letter-spacing: 0.4em;
-  color: #39ff14; /* neon green */
 
-  /* glow effect */
-  text-shadow:
-    0 0 5px #39ff14,
-    0 0 10px #39ff14,
-    0 0 20px #39ff14;
-
-  /* animations */
-  animation: glitch 0.15s infinite alternate,
-             flicker 3s infinite;
-
-  position: relative;
-}
-
-/* glitch movement */
-@keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(2px, -2px); }
-  60% { transform: translate(-2px, 1px); }
-  80% { transform: translate(1px, -1px); }
-  100% { transform: translate(0); }
-}
-
-/* flicker effect */
-@keyframes flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
-    opacity: 1;
-  }
-  20%, 24%, 55% {
-    opacity: 0.4;
-  }
-}
-
-
-/*  HackerTile Starts Here */
+/*  HackerTitle Starts Here */
 .hacker-title {
   font-family: 'Courier New', monospace;
-  font-size: 4rem;
+  font-size: 2rem;
   letter-spacing: 0.4em;
   color: #39ff14;
   text-shadow:
@@ -76,9 +36,74 @@
 
 @keyframes glitch {
   0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(2px, -2px); }
-  60% { transform: translate(-2px, 1px); }
-  80% { transform: translate(1px, -1px); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(1px, -1px); }
+  60% { transform: translate(-1px, 1px); }
+  80% { transform: translate(0px, -2px); }
   100% { transform: translate(0); }
+}
+
+/* ===== TERMINAL LAYOUT ===== */
+.terminal-container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  justify-content: center;
+}
+
+/* single box */
+.terminal-box {
+  width: 40%;
+  background: #050505;
+  border: 1px solid #39ff14;
+  box-shadow: 0 0 10px #39ff14;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+}
+
+/* title bar */
+.terminal-title {
+  background: #000;
+  color: #39ff14;
+  font-family: monospace;
+  padding: 0.5rem;
+  border-bottom: 1px solid #39ff14;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+/* input box */
+.terminal-input,
+.terminal-output {
+  background: black;
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  border: none;
+  outline: none;
+  resize: none;
+  flex: 1;
+  padding: 1rem;
+  font-size: 1rem;
+}
+
+/* user editable */
+.terminal-input::placeholder {
+  color: #1c7f0e;
+}
+
+/* output hidden caret */
+.terminal-output {
+  caret-color: transparent;
+}
+
+/* scroll bar */
+.terminal-input::-webkit-scrollbar,
+.terminal-output::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminal-input::-webkit-scrollbar-thumb,
+.terminal-output::-webkit-scrollbar-thumb {
+  background: #39ff14;
 }

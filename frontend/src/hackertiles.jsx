@@ -54,7 +54,7 @@ export default function HackerTitle() {
   }, [index, deleting]);
 
   return (
-    <header className="bg-[#1E1E24] min-h-screen flex justify-center items-center">
+    <header className="bg-[#1E1E24] flex justify-center items-center">
       <h1 className="hacker-title glitch">
         {displayText}
         <span className="cursor">█</span>

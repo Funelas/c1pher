@@ -1,0 +1,41 @@
+import { useState } from "react"
+import TerminalBox from "./terminalbox"
+import CipherConfig from "./cypherconfig"
+
+export default function TerminalContainer() {
+  const [input, setInput] = useState("")
+  const [cipher, setCipher] = useState("none")
+  const [cipherKey, setCipherKey] = useState("")
+  const [extraKey, setExtraKey] = useState("")
+
+  const output = input // we'll encrypt later
+
+  return (
+    <div className="flex justify-center gap-12 mt-8 items-center">
+      
+      <TerminalBox
+        title="INPUT"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Type message..."
+      />
+
+      <CipherConfig
+        cipher={cipher}
+        setCipher={setCipher}
+        cipherKey={cipherKey}
+        setCipherKey={setCipherKey}
+        extraKey={extraKey}
+        setExtraKey={setExtraKey}
+      />
+
+      <TerminalBox
+        title="OUTPUT"
+        value={output}
+        readOnly={true}
+        placeholder="Encrypted output..."
+      />
+
+    </div>
+  )
+}

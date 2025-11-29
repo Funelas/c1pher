@@ -24,7 +24,8 @@ export default function TerminalContainer() {
 
   const hashOutput = useMemo(() => {
     if (input == "" || hint) return ""
-    return computeHash(output, hashAlg)
+    const currentMode = mode === "encrypt" ? output : input
+    return computeHash(currentMode, hashAlg)
   }, [output, hashAlg, hint])
 
   useEffect(() => {

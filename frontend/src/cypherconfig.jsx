@@ -56,6 +56,7 @@ export default function CipherConfig({
           let b = Number(extraKey)
           if (isNaN(a) || isNaN(b)) return "Both values must be numbers"
           if (gcd(a, 26) !== 1) return "A must be coprime with 26"
+          if (extraKey === "") return "Enter shift value";
           return ""
     
         default:

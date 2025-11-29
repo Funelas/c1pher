@@ -7,7 +7,7 @@ import computeHash from "./computehash"
 export default function TerminalContainer() {
   const [mode, setMode] = useState("encrypt") // new state
   const [input, setInput] = useState("")
-  const [cipher, setCipher] = useState("none")
+  const [cipher, setCipher] = useState("affine")
   const [cipherKey, setCipherKey] = useState("")
   const [extraKey, setExtraKey] = useState("")
   const [hint, setHint] = useState("")

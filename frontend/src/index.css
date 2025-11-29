@@ -191,31 +191,3 @@
   opacity: 0.85;
 }
 
-.terminal-header {
-  display: flex;
-  justify-content: space-between; /* title left, button right */
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.terminal-title {
-  font-weight: bold;
-}
-
-.copy-btn {
-  background: transparent;
-  border: 1px solid #00ff99;
-  color: #00ff99;
-  padding: 2px 8px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.copy-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.copy-btn:hover:not(:disabled) {
-  background: rgba(0, 255, 153, 0.1);
-}

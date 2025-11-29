@@ -1,3 +1,22 @@
+const ALLOWED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?.," 
+const N = ALLOWED.length
+
+function idx(c) {
+    return ALLOWED.indexOf(c)
+  }
+  
+function shiftChar(c, shift) {
+const i = idx(c)
+if (i === -1) return c   // ignore unknown characters
+return ALLOWED[(i + shift + N) % N]
+}
+
+function unshiftChar(c, shift) {
+const i = idx(c)
+if (i === -1) return c
+return ALLOWED[(i - shift + N) % N]
+}
+  
 export function encrypt(text, cipher, key, extraKey) {
     switch (cipher) {
   
@@ -28,7 +47,7 @@ export function encrypt(text, cipher, key, extraKey) {
   }
   export function decrypt(text, cipher, key, extraKey) {
     switch (cipher) {
-      case "caesar":       return caesar(text, -Number(key))           // shift backwards
+      case "caesar":       return caesarDecrypt(text, Number(key))           // shift backwards
       case "vigenere":     return vigenereDecrypt(text, key)           // new decrypt function
       case "substitution": return substitutionDecrypt(text, key)      // new decrypt function
       case "playfair":     return playfairDecrypt(text, key)           // new decrypt function
@@ -38,62 +57,63 @@ export function encrypt(text, cipher, key, extraKey) {
       default:             return text
     }
   }
-function caesar(text, shift) {
-return text.replace(/[A-Za-z]/g, char => {
-    const base = char <= 'Z' ? 65 : 97
-    return String.fromCharCode((char.charCodeAt(0) - base + shift) % 26 + base)
-})
-}
+// Caesar Functions
+  function caesar(text, shift) {
+    return [...text].map(c => shiftChar(c, shift)).join("")
+  }
+  
+  function caesarDecrypt(text, shift) {
+    return [...text].map(c => unshiftChar(c, shift)).join("")
+  }
+  
 
+//   Vigenere Functions
 function vigenere(text, key) {
     if (!key) return text
-    let result = "", j = 0
-    key = key.toUpperCase()
+    let j = 0
   
-    for (let i = 0; i < text.length; i++) {
-      let c = text[i]
-      if (/[A-Za-z]/.test(c)) {
-        let base = c <= 'Z' ? 65 : 97
-        let k = key[j++ % key.length].charCodeAt(0) - 65
-        result += String.fromCharCode((c.charCodeAt(0) - base + k) % 26 + base)
-      } else result += c
-    }
-    return result
+    return [...text].map(c => {
+      const i = idx(c)
+      if (i === -1) return c
+  
+      const k = idx(key[j % key.length])
+      j++
+      return shiftChar(c, k)
+    }).join("")
   }
+  
   function vigenereDecrypt(text, key) {
     if (!key) return text
-    let result = "", j = 0
-    key = key.toUpperCase()
-    for (let i = 0; i < text.length; i++) {
-      let c = text[i]
-      if (/[A-Za-z]/.test(c)) {
-        let base = c <= 'Z' ? 65 : 97
-        let k = key[j++ % key.length].charCodeAt(0) - 65
-        result += String.fromCharCode((c.charCodeAt(0) - base - k + 26) % 26 + base)
-      } else result += c
-    }
-    return result
+    let j = 0
+  
+    return [...text].map(c => {
+      const i = idx(c)
+      if (i === -1) return c
+  
+      const k = idx(key[j % key.length])
+      j++
+      return unshiftChar(c, k)
+    }).join("")
   }
-  function substitution(text, map) {
-    if (!map || map.length !== 26) return text
-    map = map.toLowerCase()
-    return text.replace(/[a-z]/gi, c => {
-      let i = c.toLowerCase().charCodeAt(0) - 97
-      let m = map[i]
-      return c === c.toUpperCase() ? m.toUpperCase() : m
-    })
+// Substitution Functions  
+function substitution(text, map) {
+    if (!map || map.length !== N) return text
+  
+    return [...text].map(c => {
+      const i = idx(c)
+      return i === -1 ? c : map[i]
+    }).join("")
   }
+  
   function substitutionDecrypt(text, map) {
-    if (!map || map.length !== 26) return text
-    map = map.toLowerCase()
-    const reverseMap = Array(26)
-    for (let i = 0; i < 26; i++) reverseMap[map[i].charCodeAt(0) - 97] = String.fromCharCode(97 + i)
-    return text.replace(/[a-z]/gi, c => {
-      let i = c.toLowerCase().charCodeAt(0) - 97
-      let m = reverseMap[i]
-      return c === c.toUpperCase() ? m.toUpperCase() : m
-    })
+    if (!map || map.length !== N) return text
+    const reverse = {}
+  
+    for (let i = 0; i < N; i++) reverse[map[i]] = ALLOWED[i]
+  
+    return [...text].map(c => reverse[c] || c).join("")
   }
+//   RailFence Functions
   function railFence(text, rails) {
     if (rails <= 1) return text
     let arr = Array.from({ length: rails }, () => [])
@@ -135,7 +155,7 @@ function vigenere(text, key) {
     }
     return result
   }
-  
+//   Transposition Functions
   function transposition(text, key) {
     let col = String(key).length
     let result = ""
@@ -156,30 +176,33 @@ function vigenere(text, key) {
       }
     return result.join("")
   }
+
   
-  function affine(text, a, b) {
-    if (isNaN(a) || isNaN(b)) return text
-  
-    return text.replace(/[A-Za-z]/g, c => {
-      let base = c <= 'Z' ? 65 : 97
-      let x = c.charCodeAt(0) - base
-      return String.fromCharCode((a * x + b) % 26 + base)
-    })
-  }
   function modInverse(a, m) {
     a = ((a % m) + m) % m
     for (let x = 1; x < m; x++) if ((a * x) % m === 1) return x
     return null
   }
-  function affineDecrypt(text, a, b) {
-    let aInv = modInverse(a, 26)
-    if (aInv === null) return text
-    return text.replace(/[A-Za-z]/g, c => {
-      let base = c <= 'Z' ? 65 : 97
-      let y = c.charCodeAt(0) - base
-      return String.fromCharCode((aInv * (y - b + 26)) % 26 + base)
-    })
+//   Affine Functions
+function affine(text, a, b) {
+    return [...text].map(c => {
+      const i = idx(c)
+      if (i === -1) return c
+      return ALLOWED[(a * i + b) % N]
+    }).join("")
   }
+  
+  function affineDecrypt(text, a, b) {
+    const inv = modInverse(a, N)
+    if (!inv) return text
+  
+    return [...text].map(c => {
+      const i = idx(c)
+      if (i === -1) return c
+      return ALLOWED[(inv * (i - b + N)) % N]
+    }).join("")
+  }
+//   Playfair Functions
   function playfair(text, key) {
     if (!key) return text
   

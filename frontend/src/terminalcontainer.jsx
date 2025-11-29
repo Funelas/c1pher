@@ -16,7 +16,7 @@ export default function TerminalContainer() {
   // Compute output based on mode
   useEffect(() => {
     let result = output
-    if (hint) setOutput("")
+    if (hint) result = ""
     else if (mode === "encrypt") result = encrypt(input, cipher, cipherKey, extraKey)
     else result = decrypt(input, cipher, cipherKey, extraKey)
     setOutput(result)

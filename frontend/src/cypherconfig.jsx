@@ -1,5 +1,8 @@
 import { useEffect } from "react"
 import HashConfig from "./hashconfig"
+const ALLOWED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!.,?"
+const N = ALLOWED.length
+
 export default function CipherConfig({
     cipher,
     setCipher,
@@ -21,15 +24,23 @@ export default function CipherConfig({
           return ""
     
         case "vigenere":
-          if (!/^[a-zA-Z]+$/.test(cipherKey)) return "Letters only (A–Z)"
+          if (![...cipherKey].every(c => ALLOWED.includes(c)))
+            return "Only A–Z, a–z, 0–9, ! ? . , allowed"
+          
           return ""
     
         case "substitution":
-          if (cipherKey.length !== 26) return "Mapping must be exactly 26 letters"
+          if (cipherKey.length !== N) return `Mapping must be exactly ${N} characters`
+          if (new Set(cipherKey).size !== N) return "Each character must be unique"
+          if (![...cipherKey].every(c => ALLOWED.includes(c)))
+            return "Mapping contains invalid characters"
+
           return ""
     
         case "playfair":
+          if (!/^[A-Z]+$/i.test(cipherKey)) return "Playfair only accepts A–Z"
           if (/J/i.test(cipherKey)) return "Remove letter J (combined with I)"
+
           return ""
     
         case "transposition":
@@ -54,7 +65,8 @@ export default function CipherConfig({
     const hint = getHint()
     useEffect(() => {
       setHint(hint)
-    }, [hint])
+    }, [hint, cipherKey, extraKey, cipher])
+    
     
     
     const renderInputs = () => {
@@ -82,7 +94,8 @@ export default function CipherConfig({
               placeholder="Keyword (e.g. KEY)"
               value={cipherKey}
               onChange={(e) => {
-              const value = e.target.value.replace(/[^a-zA-Z]/g, "")
+              const value = e.target.value.replace(new RegExp(`[^${ALLOWED}]`, "g"), "")
+
               setCipherKey(value.toUpperCase())
             }}
 
@@ -94,13 +107,11 @@ export default function CipherConfig({
             <input
               className="cipher-input"
               type="text"
-              placeholder="26-char mapping"
+              placeholder="66-char mapping"
               value={cipherKey}
               onChange={(e) => {
                 const value = e.target.value
-                  .replace(/[^a-zA-Z]/g, "")
-                  .toUpperCase()
-                  .slice(0, 26)
+                .replace(new RegExp(`[^${ALLOWED}]`, "g"), "").slice(0, 66)
               
                 setCipherKey(value)
               }}

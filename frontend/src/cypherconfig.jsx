@@ -189,7 +189,7 @@ export default function CipherConfig({
     return (
       <div className="cipher-config">
   
-        <div className="cipher-title">PROCESS</div>
+        <div className="cipher-title">CIPHER ALGORITHM</div>
   
         <select
           className="cipher-select"

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import TerminalBox from "./terminalbox"
 import CipherConfig from "./cypherconfig"
 import { encrypt, decrypt } from "./cipherEngine"
@@ -12,13 +12,14 @@ export default function TerminalContainer() {
   const [extraKey, setExtraKey] = useState("")
   const [hint, setHint] = useState("")
   const [hashAlg, setHashAlg] = useState("sha256")
-
+  const [output, setOutput] = useState("")
   // Compute output based on mode
-  const output = useMemo(() => {
-    if (hint) return ""
-    return mode === "encrypt"
-      ? encrypt(input, cipher, cipherKey, extraKey)
-      : decrypt(input, cipher, cipherKey, extraKey)
+  useEffect(() => {
+    let result = output
+    if (hint) setOutput("")
+    else if (mode === "encrypt") result = encrypt(input, cipher, cipherKey, extraKey)
+    else result = decrypt(input, cipher, cipherKey, extraKey)
+    setOutput(result)
   }, [input, cipher, cipherKey, extraKey, mode, hint])
 
   const hashOutput = useMemo(() => {
@@ -26,6 +27,10 @@ export default function TerminalContainer() {
     return computeHash(output, hashAlg)
   }, [output, hashAlg, hint])
 
+  useEffect(() => {
+    setInput(output)
+    setOutput(input)
+  }, [mode])
   return (
     <div className="flex flex-col gap-8 items-center mt-8">
           {/* Mode selector at the top */}

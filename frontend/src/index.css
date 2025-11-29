@@ -167,3 +167,10 @@
   outline: none;
   box-shadow: 0 0 5px #39ff14;
 }
+
+.cipher-hint {
+  font-size: 0.7rem;
+  color: #ff5f5f;
+  margin-top: 6px;
+  opacity: 0.85;
+}

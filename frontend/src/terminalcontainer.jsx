@@ -1,15 +1,15 @@
 import { useState } from "react"
 import TerminalBox from "./terminalbox"
 import CipherConfig from "./cypherconfig"
-
+import { encrypt  } from "./cipherEngine"
 export default function TerminalContainer() {
   const [input, setInput] = useState("")
   const [cipher, setCipher] = useState("none")
   const [cipherKey, setCipherKey] = useState("")
   const [extraKey, setExtraKey] = useState("")
 
-  const output = input // we'll encrypt later
-
+  const [hint, setHint] = useState("")
+  const output = hint ? "" : encrypt(input, cipher, cipherKey, extraKey)
   return (
     <div className="flex justify-center gap-12 mt-8 items-center">
       
@@ -27,6 +27,7 @@ export default function TerminalContainer() {
         setCipherKey={setCipherKey}
         extraKey={extraKey}
         setExtraKey={setExtraKey}
+        setHint = {setHint}
       />
 
       <TerminalBox

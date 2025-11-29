@@ -1,11 +1,59 @@
+import { useEffect } from "react"
 export default function CipherConfig({
     cipher,
     setCipher,
     cipherKey,
     setCipherKey,
     extraKey,
-    setExtraKey
+    setExtraKey,
+    setHint
   }) {
+
+    const getHint = () => {
+      switch (cipher) {
+    
+        case "caesar":
+          if (!cipherKey) return "Enter shift value"
+          if (isNaN(cipherKey)) return "Shift must be a number"
+          return ""
+    
+        case "vigenere":
+          if (!/^[a-zA-Z]+$/.test(cipherKey)) return "Letters only (A–Z)"
+          return ""
+    
+        case "substitution":
+          if (cipherKey.length !== 26) return "Mapping must be exactly 26 letters"
+          return ""
+    
+        case "playfair":
+          if (/J/i.test(cipherKey)) return "Remove letter J (combined with I)"
+          return ""
+    
+        case "transposition":
+          if (!cipherKey) return "Key required (numbers only)"
+          return ""
+    
+        case "railfence":
+          if (cipherKey <= 1) return "Rails must be greater than 1"
+          return ""
+    
+        case "affine":
+          let a = Number(cipherKey)
+          let b = Number(extraKey)
+          if (isNaN(a) || isNaN(b)) return "Both values must be numbers"
+          if (gcd(a, 26) !== 1) return "A must be coprime with 26"
+          return ""
+    
+        default:
+          return ""
+      }
+    }
+    const hint = getHint()
+    useEffect(() => {
+      setHint(hint)
+    }, [hint])
+    
+    
     const renderInputs = () => {
       switch (cipher) {
         case "caesar":
@@ -15,7 +63,11 @@ export default function CipherConfig({
               type="number"
               placeholder="Shift (e.g. 3)"
               value={cipherKey}
-              onChange={(e) => setCipherKey(e.target.value)}
+              onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "")
+              setCipherKey(value)
+            }}
+
             />
           )
   
@@ -26,7 +78,11 @@ export default function CipherConfig({
               type="text"
               placeholder="Keyword (e.g. KEY)"
               value={cipherKey}
-              onChange={(e) => setCipherKey(e.target.value)}
+              onChange={(e) => {
+              const value = e.target.value.replace(/[^a-zA-Z]/g, "")
+              setCipherKey(value.toUpperCase())
+            }}
+
             />
           )
   
@@ -37,7 +93,15 @@ export default function CipherConfig({
               type="text"
               placeholder="26-char mapping"
               value={cipherKey}
-              onChange={(e) => setCipherKey(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value
+                  .replace(/[^a-zA-Z]/g, "")
+                  .toUpperCase()
+                  .slice(0, 26)
+              
+                setCipherKey(value)
+              }}
+              
             />
           )
   
@@ -48,7 +112,11 @@ export default function CipherConfig({
               type="text"
               placeholder="Keyword (no J)"
               value={cipherKey}
-              onChange={(e) => setCipherKey(e.target.value)}
+              onChange={(e) => {
+              const value = e.target.value.replace(/[^a-zA-Z]/g, "")
+              setCipherKey(value.toUpperCase())
+            }}
+
             />
           )
   
@@ -59,7 +127,11 @@ export default function CipherConfig({
               type="number"
               placeholder="Key (e.g. 4312)"
               value={cipherKey}
-              onChange={(e) => setCipherKey(e.target.value)}
+              onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "")
+              setCipherKey(value)
+            }}
+
             />
           )
   
@@ -70,7 +142,11 @@ export default function CipherConfig({
               type="number"
               placeholder="Rails (e.g. 3)"
               value={cipherKey}
-              onChange={(e) => setCipherKey(e.target.value)}
+              onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "")
+              setCipherKey(value)
+            }}
+
             />
           )
   
@@ -82,14 +158,22 @@ export default function CipherConfig({
                 type="number"
                 placeholder="A (coprime)"
                 value={cipherKey}
-                onChange={(e) => setCipherKey(e.target.value)}
+                onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, "")
+                setCipherKey(value)
+              }}
+
               />
               <input
                 className="cipher-input"
                 type="number"
                 placeholder="B (shift)"
                 value={extraKey}
-                onChange={(e) => setExtraKey(e.target.value)}
+                onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, "")
+                setExtraKey(value)
+              }}
+
               />
             </>
           )
@@ -98,7 +182,7 @@ export default function CipherConfig({
           return null
       }
     }
-  
+    
     return (
       <div className="cipher-config">
   
@@ -120,8 +204,19 @@ export default function CipherConfig({
         </select>
   
         {renderInputs()}
+        {hint && (
+          <div className="cipher-hint">
+            {hint}
+          </div>
+        )}
+
+
   
       </div>
     )
+  }
+  
+  function gcd(a, b) {
+    return b === 0 ? a : gcd(b, a % b)
   }
   

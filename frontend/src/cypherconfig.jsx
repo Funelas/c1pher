@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import HashConfig from "./hashconfig"
 export default function CipherConfig({
     cipher,
     setCipher,
@@ -6,7 +7,9 @@ export default function CipherConfig({
     setCipherKey,
     extraKey,
     setExtraKey,
-    setHint
+    setHint,
+    setHashAlg,
+    hashAlg
   }) {
 
     const getHint = () => {
@@ -209,7 +212,9 @@ export default function CipherConfig({
             {hint}
           </div>
         )}
-
+        <HashConfig 
+          hashAlg={hashAlg} 
+          setHashAlg={setHashAlg}/>
 
   
       </div>

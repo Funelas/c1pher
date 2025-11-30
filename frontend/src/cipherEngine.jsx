@@ -45,18 +45,18 @@ export function encrypt(text, cipher, key, extraKey) {
         return text
     }
   }
-  export function decrypt(text, cipher, key, extraKey) {
-    switch (cipher) {
-      case "caesar":       return caesarDecrypt(text, Number(key))           // shift backwards
-      case "vigenere":     return vigenereDecrypt(text, key)           // new decrypt function
-      case "substitution": return substitutionDecrypt(text, key)      // new decrypt function
-      case "playfair":     return playfairDecrypt(text, key)           // new decrypt function
-      case "transposition":return transpositionDecrypt(text, key)     // new decrypt function
-      case "railfence":    return railFenceDecrypt(text, Number(key)) // new decrypt function
-      case "affine":       return affineDecrypt(text, Number(key), Number(extraKey)) // new decrypt function
-      default:             return text
-    }
+export function decrypt(text, cipher, key, extraKey) {
+  switch (cipher) {
+    case "caesar":       return caesarDecrypt(text, Number(key))           // shift backwards
+    case "vigenere":     return vigenereDecrypt(text, key)           // new decrypt function
+    case "substitution": return substitutionDecrypt(text, key)      // new decrypt function
+    case "playfair":     return playfairDecrypt(text, key)           // new decrypt function
+    case "transposition":return transpositionDecrypt(text, key)     // new decrypt function
+    case "railfence":    return railFenceDecrypt(text, Number(key)) // new decrypt function
+    case "affine":       return affineDecrypt(text, Number(key), Number(extraKey)) // new decrypt function
+    default:             return text
   }
+}
 // Caesar Functions
   function caesar(text, shift) {
     return [...text].map(c => shiftChar(c, shift)).join("")

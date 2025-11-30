@@ -19,6 +19,7 @@ export default function TerminalContainer() {
     if (hint) result = ""
     else if (mode === "encrypt") result = encrypt(input, cipher, cipherKey, extraKey)
     else result = decrypt(input, cipher, cipherKey, extraKey)
+    console.log("Goes Here")
     setOutput(result)
   }, [input, cipher, cipherKey, extraKey, mode, hint])
 
@@ -29,9 +30,15 @@ export default function TerminalContainer() {
   }, [output, hashAlg, hint])
 
   useEffect(() => {
-    setInput(output)
-    setOutput(input)
+    const temp = input
+    if (output !== ""){
+      setInput(output)
+      setOutput(temp)
+    }
+    
   }, [mode])
+  
+  
   return (
     <div className="flex flex-col gap-8 items-center mt-8">
           {/* Mode selector at the top */}

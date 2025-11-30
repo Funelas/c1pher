@@ -3,7 +3,7 @@ import TerminalBox from "./terminalbox"
 import CipherConfig from "./cypherconfig"
 import { encrypt, decrypt } from "./cipherEngine"
 import computeHash from "./computehash"
-
+import BashModal from "./bashmodal"
 export default function TerminalContainer() {
   const [mode, setMode] = useState("encrypt") // new state
   const [input, setInput] = useState("")
@@ -13,6 +13,8 @@ export default function TerminalContainer() {
   const [hint, setHint] = useState("")
   const [hashAlg, setHashAlg] = useState("sha256")
   const [output, setOutput] = useState("")
+  const [bashModal, setBashModal] = useState(false)
+
   // Compute output based on mode
   useEffect(() => {
     let result = output
@@ -111,14 +113,22 @@ export default function TerminalContainer() {
       {/* Hash terminal below */}
       <div className="flex w-full">
         <div className="flex w-full justify-center items-center">
-          <TerminalBox
-            title="HASH"
-            value={hashOutput}
-            readOnly
-            placeholder="Hash of the output..."
-          />
+        <TerminalBox
+          title="HASH"
+          value={hashOutput}
+          readOnly
+          isBash
+          onOpenBashModal={() => setBashModal(true)}
+        />
+
         </div>
       </div>
+      <BashModal
+        visible={bashModal}
+        onClose={() => setBashModal(false)}
+        bashValue={hashOutput}
+      />
+
     </div>
   )
 }
